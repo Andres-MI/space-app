@@ -14,6 +14,7 @@ class NasaRepositoryImpl implements NasaRepository {
 
   NasaRepositoryImpl({required this.remoteDataSource, required this.localDataSource});
 
+  ///Method that will return the Entity if successful or Failure if there has been an error
   @override
   Future<Either<Failure, MarsPicture>> getMarsPicture(
       {required String cameraType}) async {
@@ -36,7 +37,7 @@ class NasaRepositoryImpl implements NasaRepository {
       return Left(ServerFailure());
     }
   }
-
+  ///Convert our Model into Entities Objects
   MarsPicture convertToMarsPicture(MarsPictureModel response) {
     MarsPicture marsPicture = MarsPicture(
         urlImage: response.photos?[0].imgSrc ?? '',

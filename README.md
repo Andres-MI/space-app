@@ -1,5 +1,5 @@
 # space_app
-
+*WIP: Unfinished app showcasing Bloc and Clean Architecture in Flutter
 Test App to use NASA API
 
 ## Getting Started

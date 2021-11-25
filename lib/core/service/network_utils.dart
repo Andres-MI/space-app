@@ -6,7 +6,7 @@ class NetworkUtils{
     dio.options.receiveTimeout = 5000; //5s
     dio.options.responseType = ResponseType.plain;
     dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) async {
-      //Do something before the request is sent
+      ///Do something before the request is sent
       options.headers['Content-Type'] = 'application/json';
       ///Add Token to the calls
       // var accessToken = (await getAccessTokenFromCache()).accessToken;
@@ -15,9 +15,10 @@ class NetworkUtils{
       // }
       return handler.next(options);
     }, onResponse: (response, handler) {
-      // Do something with response data
+      /// Do something with response data
       return handler.next(response);
     }, onError: (DioError err, handler) async {
+      ///Do something with response error
       if (err.response?.statusCode == 401) {
          await refreshUserToken(dio: dio);
       }
