@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/core/constants/constants.dart';
 import 'package:space_app/features/space_feature/presentation/bloc/nasa_bloc.dart';
+import 'package:space_app/features/space_feature/presentation/pages/page_a.dart';
+import 'package:space_app/features/space_feature/presentation/pages/page_b.dart';
 import 'package:space_app/features/space_feature/presentation/widgets/home_page_half.dart';
 import 'package:space_app/injection_container.dart';
 
@@ -29,7 +31,10 @@ class _HomePageState extends State<HomePage> {
       child: BlocListener<NasaBloc, NasaState>(
         listener: (context, state) {
           if (state is PicOfTheDayLoaded) {
-          } else if (state is MarsPicLoaded) {}
+            Navigator.of(context).pushNamed(PageA.screenId, arguments: state.pictureOfTheDay);
+          } else if (state is MarsPicLoaded) {
+            Navigator.of(context).pushNamed(PageB.screenId);
+          }
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

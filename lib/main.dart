@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:space_app/features/space_feature/presentation/pages/home_page.dart';
+import 'package:space_app/features/space_feature/presentation/pages/page_a.dart';
+import 'features/space_feature/presentation/pages/page_b.dart';
 import 'injection_container.dart' as di;
 
 Future<void> main() async {
@@ -29,6 +31,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
+      routes: {
+        PageA.screenId:(context) => const PageA(),
+        PageB.screenId:(context) => const PageB()
+      },
     );
   }
 }
