@@ -9,7 +9,7 @@ abstract class NasaEvent extends Equatable {
 class GetPictureOfTheDayEvent extends NasaEvent {}
 
 class GetMarsPictureEvent extends NasaEvent {
-  final String cameraType;
+  final CameraType cameraType;
 
   const GetMarsPictureEvent({required this.cameraType});
   @override

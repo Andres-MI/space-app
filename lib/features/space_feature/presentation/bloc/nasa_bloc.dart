@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:space_app/core/enum/camera_type.dart';
 import 'package:space_app/core/usecases/usecase.dart';
 import 'package:space_app/features/space_feature/domain/entities/mars_picture.dart';
 import 'package:space_app/features/space_feature/domain/entities/picture_of_the_day.dart';
@@ -30,8 +31,9 @@ class NasaBloc extends Bloc<NasaEvent, NasaState> {
           (picOfTheDay) => PicOfTheDayLoaded(pictureOfTheDay: picOfTheDay));
     } else if (event is GetMarsPictureEvent) {
       yield NasaLoading();
+      final cameraType = event.cameraType;
       final failureOrMarsPic =
-          await marsPictureUseCase(MarsPictureParams(cameraType: event.cameraType));
+          await marsPictureUseCase(MarsPictureParams(cameraType: cameraType.stringValue()));
       yield failureOrMarsPic.fold(
           (failure) => const NasaError(message: 'Error Retrieving Mars Picture'),
           (marsPicture) => MarsPicLoaded(marsPicture: marsPicture));
