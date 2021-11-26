@@ -17,26 +17,41 @@ class NasaBloc extends Bloc<NasaEvent, NasaState> {
   final GetMarsPictureUseCase marsPictureUseCase;
 
   NasaBloc({required this.pictureOfTheDayUseCase, required this.marsPictureUseCase})
-      : super(NasaInitial());
+      : super(NasaInitial()){
+    on<GetPictureOfTheDayEvent>((event, emit) async {
+      emit(NasaLoading());
+        final failureOrPicOfTheDay = await pictureOfTheDayUseCase(NoParams());
+        failureOrPicOfTheDay.fold((failure) => emit(const NasaError(message: 'Error retrieving picture of the day')),
+                (picOfTheDay) => emit(PicOfTheDayLoaded(pictureOfTheDay: picOfTheDay)));
+    });
 
-  @override
-  Stream<NasaState> mapEventToState(
-    NasaEvent event,
-  ) async* {
-    if (event is GetPictureOfTheDayEvent) {
-      yield NasaLoading();
-      final failureOrPicOfTheDay = await pictureOfTheDayUseCase(NoParams());
-      yield failureOrPicOfTheDay.fold(
-          (failure) => const NasaError(message: 'Error Retrieving Picture Of The Day'),
-          (picOfTheDay) => PicOfTheDayLoaded(pictureOfTheDay: picOfTheDay));
-    } else if (event is GetMarsPictureEvent) {
-      yield NasaLoading();
-      final cameraType = event.cameraType;
-      final failureOrMarsPic =
-          await marsPictureUseCase(MarsPictureParams(cameraType: cameraType.stringValue()));
-      yield failureOrMarsPic.fold(
-          (failure) => const NasaError(message: 'Error Retrieving Mars Picture'),
-          (marsPicture) => MarsPicLoaded(marsPicture: marsPicture));
-    }
+    on<GetMarsPictureEvent>((event, emit) async {
+      emit(NasaLoading());
+      final failureOrMarsPic = await marsPictureUseCase(MarsPictureParams(cameraType: event.cameraType.stringValue()));
+          failureOrMarsPic.fold((failure) => emit(const NasaError(message: 'Error retrieving Mars picture')),
+              (marsPicture) => emit(MarsPicLoaded(marsPicture: marsPicture)));
+    });
   }
+
+  ///Legacy Bloc < 7.2.0
+  // @override
+  // Stream<NasaState> mapEventToState(
+  //   NasaEvent event,
+  // ) async* {
+  //   if (event is GetPictureOfTheDayEvent) {
+  //     yield NasaLoading();
+  //     final failureOrPicOfTheDay = await pictureOfTheDayUseCase(NoParams());
+  //     yield failureOrPicOfTheDay.fold(
+  //         (failure) => const NasaError(message: 'Error Retrieving Picture Of The Day'),
+  //         (picOfTheDay) => PicOfTheDayLoaded(pictureOfTheDay: picOfTheDay));
+  //   } else if (event is GetMarsPictureEvent) {
+  //     yield NasaLoading();
+  //     final cameraType = event.cameraType;
+  //     final failureOrMarsPic =
+  //         await marsPictureUseCase(MarsPictureParams(cameraType: cameraType.stringValue()));
+  //     yield failureOrMarsPic.fold(
+  //         (failure) => const NasaError(message: 'Error Retrieving Mars Picture'),
+  //         (marsPicture) => MarsPicLoaded(marsPicture: marsPicture));
+  //   }
+  // }
 }

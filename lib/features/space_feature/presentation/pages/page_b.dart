@@ -7,6 +7,11 @@ class PageB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Container(
+        child: Center(child: IconButton(onPressed: Navigator.of(context).canPop() ? () => Navigator.of(context).pop() : null,
+            icon: const Icon(Icons.arrow_back_sharp)),),
+      ),
+    );
   }
 }
